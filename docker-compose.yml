@@ -14,7 +14,7 @@ services:
     volumes:
       - postgres18:/data/postgres
       - ./shop-server/sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
-      - ./shop-server/sql/data_only.sql:/docker-entrypoint-initdb.d/data_only.sql
+      - ./shop-server/sql/data_only.sql:/docker-entrypoint-initdb.d/data_dump.sql
     networks:
       - postgres
     

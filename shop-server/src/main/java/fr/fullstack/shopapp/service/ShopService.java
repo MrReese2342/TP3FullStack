@@ -17,6 +17,15 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import fr.fullstack.shopapp.model.OpeningHoursShop;
+
+
 @Service
 public class ShopService {
     @PersistenceContext
@@ -28,15 +37,17 @@ public class ShopService {
     @Transactional
     public Shop createShop(Shop shop) throws Exception {
         try {
+            validateOpeningHoursNoOverlap(shop.getOpeningHours()); // Chevauchement horaires
+
             Shop newShop = shopRepository.save(shop);
-            // Refresh the entity after the save. Otherwise, @Formula does not work.
             em.flush();
             em.refresh(newShop);
             return newShop;
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
+        }catch (Exception e) {
+        throw new Exception(e.getMessage());
         }
     }
+
 
     @Transactional
     public void deleteShopById(long id) throws Exception {
@@ -90,6 +101,7 @@ public class ShopService {
     @Transactional
     public Shop updateShop(Shop shop) throws Exception {
         try {
+            validateOpeningHoursNoOverlap(shop.getOpeningHours());//cheveauchement
             getShop(shop.getId());
             return this.createShop(shop);
         } catch (Exception e) {
@@ -198,4 +210,54 @@ public class ShopService {
                 }))
                 .fetchHits(20);
     }
+
+    //Cheveauchement d'horaires
+    
+
+    private void validateOpeningHoursNoOverlap(List<OpeningHoursShop> hours) throws Exception {
+        if (hours == null || hours.isEmpty()) return;
+
+        // Group by day (1..7)
+        Map<Integer, List<OpeningHoursShop>> byDay = new HashMap<>();
+            for (OpeningHoursShop h : hours) {
+            int day = (int) h.getDay();
+            byDay.computeIfAbsent(day, k -> new ArrayList<>()).add(h);
+        }
+
+        for (Map.Entry<Integer, List<OpeningHoursShop>> entry : byDay.entrySet()) {
+            int day = entry.getKey();
+            List<OpeningHoursShop> slots = entry.getValue();
+
+        // Validate each slot (openAt < closeAt)
+        for (OpeningHoursShop s : slots) {
+            LocalTime start = s.getOpenAt();
+            LocalTime end = s.getCloseAt();
+
+            if (start == null || end == null) {
+                throw new Exception("Opening hours invalid: missing time for day " + day);
+            }
+            if (!start.isBefore(end)) {
+                throw new Exception("Opening hours invalid: openAt must be before closeAt for day " + day);
+            }
+        }
+
+        // Sort by openAt
+        slots.sort(Comparator.comparing(OpeningHoursShop::getOpenAt));
+
+        // Check overlaps: current.openAt < previous.closeAt
+        for (int i = 1; i < slots.size(); i++) {
+            OpeningHoursShop prev = slots.get(i - 1);
+            OpeningHoursShop curr = slots.get(i);
+
+            if (curr.getOpenAt().isBefore(prev.getCloseAt())) {
+                throw new Exception(
+                        "Opening hours conflict on day " + day + " between "
+                                + prev.getOpenAt() + "-" + prev.getCloseAt()
+                                + " and "
+                                + curr.getOpenAt() + "-" + curr.getCloseAt()
+                );
+            }
+        }
+    }
+}
 }

@@ -1,3 +1,4 @@
+/*
 -- Shops --
 
 insert into shops (id, name, created_at, in_vacations) values (1, 'Boutique 1', '2021-11-28', false);
@@ -719,3 +720,4 @@ insert into products_categories (product_id, category_id) values (292, 45);
 -- Hibernate Sequence --
 
 create sequence hibernate_sequence start 295 increment 1;
+*/

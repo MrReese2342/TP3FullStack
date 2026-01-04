@@ -1,40 +1,54 @@
 version: "3.9"
 
 services:
-  db:
+  shop-db:
     container_name: shop-db
-    image: postgres:18
-    hostname: "psql_docker"
+    image: postgres:16
     ports:
       - "5432:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: "1234"
-      PGDATA: /data/postgres18
+      PGDATA: /var/lib/postgresql/data
     volumes:
-      - postgres18:/data/postgres
-      - ./shop-server/sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
-      - ./shop-server/sql/data_only.sql:/docker-entrypoint-initdb.d/data_dump.sql
+     - postgres18:/var/lib/postgresql/data
+     - ./shop-server/sql:/docker-entrypoint-initdb.d
     networks:
       - postgres
-    
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+
+
   elasticsearch:
     container_name: shop-elasticsearch
     image: docker.elastic.co/elasticsearch/elasticsearch:9.2.2
-    hostname: "elasticsearch_docker"
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
       - xpack.security.http.ssl.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - logger.level=WARN
+
     ports:
       - "9200:9200"
     networks:
       - postgres
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+
 
   api:
     depends_on:
-      - "db"
-      - "elasticsearch"
+      shop-db:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
     container_name: shop-server
     build: ./shop-server
     ports:
@@ -43,16 +57,15 @@ services:
       - postgres
     restart: always
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://shop-db:5432/postgres
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=1234
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - ES_URL=elasticsearch:9200
 
-
   front:
     depends_on:
-      - "api"
+      - api
     container_name: shop-client
     build: ./shop-client
     ports:

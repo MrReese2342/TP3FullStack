@@ -1,0 +1,37 @@
+import axios, { AxiosResponse } from 'axios';
+import { MinimalProduct, Product, ResponseArray } from '../types';
+
+export function getProducts(page: number, size: number): Promise<ResponseArray<Product>> {
+    return axios.get(`${import.meta.env.VITE_API_URL}/products?page=${page}&size=${size}`);
+}
+
+export function getProductsbyShop(shopId: string, page: number, size: number): Promise<ResponseArray<Product>> {
+    return axios.get(`${import.meta.env.VITE_API_URL}/products?shopId=${shopId}&page=${page}&size=${size}`);
+}
+
+export function getProductsbyShopAndCategory(
+    shopId: string,
+    categoryId: number,
+    page: number,
+    size: number,
+): Promise<ResponseArray<Product>> {
+    return axios.get(
+        `${import.meta.env.VITE_API_URL}/products?shopId=${shopId}&categoryId=${categoryId}&page=${page}&size=${size}`,
+    );
+}
+
+export function getProduct(id: string): Promise<AxiosResponse<Product>> {
+    return axios.get(`${import.meta.env.VITE_API_URL}/products/${id}`);
+}
+
+export function createProduct(product: MinimalProduct): Promise<AxiosResponse<Product>> {
+    return axios.post(`${import.meta.env.VITE_API_URL}/products`, product);
+}
+
+export function editProduct(product: MinimalProduct): Promise<AxiosResponse<Product>> {
+    return axios.put(`${import.meta.env.VITE_API_URL}/products`, product);
+}
+
+export function deleteProduct(id: string): Promise<AxiosResponse<Product>> {
+    return axios.delete(`${import.meta.env.VITE_API_URL}/products/${id}`);
+}

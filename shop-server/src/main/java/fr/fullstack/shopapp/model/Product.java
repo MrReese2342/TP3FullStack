@@ -27,7 +27,7 @@ public class Product {
             name = "products_categories",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private List<Category> categories = new ArrayList<Category>();
+    private List<Category> categories = new ArrayList<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -35,12 +35,16 @@ public class Product {
 
     @OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true)
     @Size(min = 1, message = "At least one name and one description must be provided")
-    private List<@Valid LocalizedProduct> localizedProduct = new ArrayList<LocalizedProduct>();
+    private List<@Valid LocalizedProduct> localizedProduct = new ArrayList<>();
 
-    @Column(nullable = false)
+    /**
+     * Price stored in cents (E_PRD_15).
+     * Example: 1234 => 12,34 €
+     */
+    @Column(nullable = false, name = "price")
     @PositiveOrZero(message = "Price must be positive")
     @NotNull(message = "Price may not be null")
-    private float price;
+    private long price;
 
     @ManyToOne
     private Shop shop;
@@ -57,7 +61,8 @@ public class Product {
         return localizedProduct;
     }
 
-    public float getPrice() {
+    /** Price in cents */
+    public long getPrice() {
         return price;
     }
 
@@ -77,7 +82,8 @@ public class Product {
         this.localizedProduct = localizedProduct;
     }
 
-    public void setPrice(float price) {
+    /** Price in cents */
+    public void setPrice(long price) {
         this.price = price;
     }
 

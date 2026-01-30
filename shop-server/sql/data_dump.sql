@@ -231,9 +231,6 @@ INSERT INTO public.shops (id, created_at, in_vacations, name) VALUES (27, '2015-
 INSERT INTO public.shops (id, created_at, in_vacations, name) VALUES (30, '2019-06-28', false, 'Boutique 8');
 INSERT INTO public.shops (id, created_at, in_vacations, name) VALUES (34, '2016-05-16', false, 'Boutique 9');
 INSERT INTO public.shops (id, created_at, in_vacations, name) VALUES (39, '2015-02-17', false, 'Boutique 10');
-INSERT INTO public.shops (id, created_at, in_vacations, name) VALUES (2, '2025-11-15', true, 'Mon nouveau shop super');
-INSERT INTO public.shops (id, created_at, in_vacations, name) VALUES (52, '2025-11-29', true, 'Mon nouveau shop super');
-INSERT INTO public.shops (id, created_at, in_vacations, name) VALUES (102, '2025-11-29', true, 'Mon nouveau shop super');
 
 
 --

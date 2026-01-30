@@ -4,6 +4,8 @@ Projet réalisé dans le cadre du TP3 de l’UE Full Stack.
 L’application permet de gérer des boutiques, leurs produits, catégories,
 horaires d’ouverture et d’effectuer des recherches via Elasticsearch.
 
+Lien github : https://github.com/MrReese2342/TP3FullStack
+
 ## Stack technique
 
 - Backend : Spring Boot, JPA (Hibernate), Hibernate Search

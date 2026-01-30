@@ -29,9 +29,7 @@ horaires d’ouverture et d’effectuer des recherches via Elasticsearch.
 À la racine du projet :
 docker compose up --build
 
-Frontend : http://localhost:4200
-
-Backend : http://localhost:8080
+Application : http://localhost:4200
 
 Elasticsearch : http://localhost:9200
 

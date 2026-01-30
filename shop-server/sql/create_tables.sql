@@ -70,13 +70,8 @@ add constraint FKtj1vdea8qwerbjqie4xldl1el foreign key (product_id) references p
 alter table products_localized_product
 add constraint FKjs8yfvw4we59oaei8c9txb4wy foreign key (localized_product_id) references localized_product;
 
-<<<<<<< HEAD
-alter table products_localized_product add constraint
-FK6i2yelx9i3lagm1u7n6v0xnfh foreign key (product_id) references products;
-=======
 alter table products_localized_product
 add constraint FK6i2yelx9i3lagm1u7n6v0xnfh foreign key (product_id) references products;
->>>>>>> 27e1105 (remplacement des scripts sql et les models par les nouveaux)
 
 alter table shops_opening_hours
 add constraint FKti43xlm3mfbeodhgi4qn1yhgw foreign key (opening_hours_id) references opening_hours;

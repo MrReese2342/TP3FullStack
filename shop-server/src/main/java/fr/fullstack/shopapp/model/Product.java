@@ -30,8 +30,9 @@ public class Product {
     private List<Category> categories = new ArrayList<>();
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
 
     @OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true)
     @Size(min = 1, message = "At least one name and one description must be provided")
@@ -74,7 +75,7 @@ public class Product {
         this.categories = categories;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

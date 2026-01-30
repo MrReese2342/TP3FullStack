@@ -34,8 +34,9 @@ public class Shop {
     private LocalDate createdAt;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
 
     @Column(nullable = false)
     @NotNull(message = "InVacations may not be null")
@@ -86,7 +87,7 @@ public class Shop {
         return this.products;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

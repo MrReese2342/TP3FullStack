@@ -28,8 +28,9 @@ public class OpeningHoursShop {
     private int day;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
 
     @Column(nullable = false)
     @JsonFormat(pattern = "HH:mm:ss")
@@ -60,7 +61,7 @@ public class OpeningHoursShop {
         this.day = day;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

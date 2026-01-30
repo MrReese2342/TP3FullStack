@@ -19,8 +19,9 @@ public class LocalizedProduct {
     private String description;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
 
     @Column(nullable = false)
     @StringEnumeration(enumClass = Locale.class, message = "Locale must be FR or EN")
@@ -52,7 +53,7 @@ public class LocalizedProduct {
         this.description = description;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

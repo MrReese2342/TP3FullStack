@@ -591,7 +591,28 @@ INSERT INTO public.shops_opening_hours (shop_id, opening_hours_id) VALUES (34, 3
 INSERT INTO public.shops_opening_hours (shop_id, opening_hours_id) VALUES (34, 38);
 INSERT INTO public.shops_opening_hours (shop_id, opening_hours_id) VALUES (39, 40);
 
+<<<<<<< HEAD
 
+=======
+-- Resync identities/sequences after manual IDs inserts
+SELECT setval(pg_get_serial_sequence('public.categories','id'),
+              (SELECT COALESCE(MAX(id),0) FROM public.categories) + 1, false);
+
+SELECT setval(pg_get_serial_sequence('public.localized_product','id'),
+              (SELECT COALESCE(MAX(id),0) FROM public.localized_product) + 1, false);
+
+SELECT setval(pg_get_serial_sequence('public.opening_hours','id'),
+              (SELECT COALESCE(MAX(id),0) FROM public.opening_hours) + 1, false);
+
+SELECT setval(pg_get_serial_sequence('public.shops','id'),
+              (SELECT COALESCE(MAX(id),0) FROM public.shops) + 1, false);
+
+SELECT setval(pg_get_serial_sequence('public.products','id'),
+              (SELECT COALESCE(MAX(id),0) FROM public.products) + 1, false);
+
+SELECT setval(pg_get_serial_sequence('public.translation','id'),
+              (SELECT COALESCE(MAX(id),0) FROM public.translation) + 1, false);
+>>>>>>> 27e1105 (remplacement des scripts sql et les models par les nouveaux)
 
 --
 -- PostgreSQL database dump complete

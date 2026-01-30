@@ -18,8 +18,9 @@ import java.util.List;
 @Table(name = "categories")
 public class Category {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
 
     @Size(min = 1, max = 255, message = "Name must be between 1 and 255 characters")
     @NotNull(message = "Name may not be null")
@@ -42,7 +43,7 @@ public class Category {
         return products;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
